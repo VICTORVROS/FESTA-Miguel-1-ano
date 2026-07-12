@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirmar presença — O Poderoso Miguel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div class="wrap">
+
+  <a class="voltar" href="index.html">← Voltar ao convite</a>
+  <img class="logo" src="logo.png" alt="O Poderoso Miguel" style="margin-top:12px">
+  <p class="titulo">Confirmar presença</p>
+
+  <!-- PAUTA -->
+  <section class="card">
+    <div class="card-head"><span class="dot"></span><h2>Pauta da reunião</h2></div>
+    <div class="card-in">
+      <div class="facts">
+        <div class="fact"><span class="k">Data</span><span class="v" id="fData">—</span></div>
+        <div class="fact"><span class="k">Horário</span><span class="v" id="fHora">—</span></div>
+        <div class="fact"><span class="k">Local</span><span class="v" id="fLocal">—<small id="fEnd"></small></span></div>
+      </div>
+      <a class="maps" id="fMaps" href="#" target="_blank" rel="noopener">Abrir no mapa →</a>
+      <div class="countdown" id="countdown"></div>
+    </div>
+  </section>
+
+  <!-- FORMULÁRIO -->
+  <section class="card" id="formCard">
+    <div class="card-head"><span class="dot"></span><h2>Termo de confirmação</h2></div>
+    <div class="card-in">
+      <p class="sub" id="prazoTxt"></p>
+
+      <form id="rsvp" novalidate>
+        <label for="nome">Seu nome
+          <small>Quem está confirmando pelo grupo.</small>
+        </label>
+        <input id="nome" type="text" autocomplete="name" required>
+
+        <label for="fone">WhatsApp
+          <small>Só para avisar de qualquer mudança.</small>
+        </label>
+        <input id="fone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(24) 99999-9999" required>
+
+        <label>Você comparece à reunião?</label>
+        <div class="choice">
+          <input type="radio" id="vou" name="presenca" value="sim" required>
+          <label for="vou">Vou sim, o chefe pode contar comigo</label>
+          <input type="radio" id="naovou" name="presenca" value="nao">
+          <label for="naovou">Dessa vez não vou conseguir</label>
+        </div>
+
+        <div id="blocoSim" class="hidden">
+          <label for="qtd">Quantos convidados vêm com você?
+            <small>Sem contar você. Preencha o nome de cada um.</small>
+          </label>
+          <select id="qtd">
+            <option value="">Selecione...</option>
+            <option value="0">Nenhum, vou sozinho(a)</option>
+            <option value="1">1 convidado</option>
+            <option value="2">2 convidados</option>
+            <option value="3">3 convidados</option>
+            <option value="4">4 convidados</option>
+          </select>
+          <div id="convidados"></div>
+        </div>
+
+        <label for="recado">Recado para o Miguel
+          <small>A gente guarda todos para ele ler quando crescer.</small>
+        </label>
+        <textarea id="recado" placeholder="Escreva algo bonito..."></textarea>
+
+        <p class="gate hidden" id="gate"></p>
+        <button class="go" type="submit" id="btn" disabled>Assinar confirmação</button>
+        <p class="err hidden" id="err"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- CONFIRMADO -->
+  <section class="card done hidden" id="doneCard">
+    <div class="card-head"><span class="dot"></span><h2>Registro do RH</h2></div>
+    <div class="card-in">
+      <div class="stamp" id="stamp">APROVADO</div>
+      <h3 id="doneTitle">Presença confirmada</h3>
+      <p id="doneText"></p>
+      <div class="lista hidden" id="lista"></div>
+      <button class="again" id="again">Preciso corrigir minha resposta</button>
+    </div>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+const CONFIG = {
+  dataISO   : '2026-08-15T17:00:00',
+  dataTexto : 'Sábado, 15 de agosto',
+  horario   : 'das 17h às 21h',
+  local     : 'Vivace Eventos',
+  endereco  : 'R. Des. Ellis Hermydio Figueira, 452 — Aterrado, Volta Redonda/RJ',
+  mapsUrl   : 'https://www.google.com/maps/search/?api=1&query=Vivace+Eventos+R.+Des.+Ellis+Hermydio+Figueira+452+Aterrado+Volta+Redonda+RJ',
+  prazo     : '8 de agosto',
+  whatsapp  : '(24) 99951-8299',
+};
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCWc2ZXPhA_kU0HbcRqY3QPrGgug5HtBSQ",
+  authDomain: "poderoso-miguel.firebaseapp.com",
+  databaseURL: "https://poderoso-miguel-default-rtdb.firebaseio.com",
+  projectId: "poderoso-miguel",
+  storageBucket: "poderoso-miguel.firebasestorage.app",
+  messagingSenderId: "382916237062",
+  appId: "1:382916237062:web:bba1400114d6ae4d24b087"
+};
+
+const DB_PATH = 'confirmacoes';
+const LS_KEY  = 'rsvp_miguel_1ano';
+const $ = id => document.getElementById(id);
+
+$('fData').textContent = CONFIG.dataTexto;
+$('fHora').textContent = CONFIG.horario;
+$('fLocal').firstChild.nodeValue = CONFIG.local;
+$('fEnd').textContent = CONFIG.endereco;
+$('fMaps').href       = CONFIG.mapsUrl;
+$('prazoTxt').textContent =
+  `Responda até ${CONFIG.prazo}. Precisamos do nome de cada convidado para acertar comida, lembrancinhas e espaço.`;
+$('footer').innerHTML =
+  `Dúvidas? Fale com o RH: <a href="https://wa.me/55${CONFIG.whatsapp.replace(/\D/g,'')}">${CONFIG.whatsapp}</a>`;
+
+(function contagem(){
+  const dias = Math.ceil((new Date(CONFIG.dataISO) - new Date()) / 86400000);
+  const el = $('countdown');
+  if (isNaN(dias)) { el.style.display = 'none'; return; }
+  if (dias > 1)        el.innerHTML = `faltam <b>${dias}</b> dias para a reunião`;
+  else if (dias === 1) el.innerHTML = `a reunião é <b>amanhã</b>`;
+  else if (dias === 0) el.innerHTML = `a reunião é <b>hoje</b>`;
+  else                 el.innerHTML = `<b>obrigado</b> por comparecer`;
+})();
+
+/* ---- convidados ---- */
+const box = $('convidados');
+
+function cardConvidado(i){
+  const d = document.createElement('div');
+  d.className = 'guest';
+  d.dataset.i = i;
+  d.innerHTML = `
+    <div class="guest-h"><span>Convidado ${i}</span><span class="st">—</span></div>
+    <input type="text" class="g-nome" placeholder="Nome do convidado ${i}" autocomplete="off">
+    <div class="seg">
+      <input type="radio" id="t${i}a" name="tipo${i}" value="adulto">
+      <label for="t${i}a">Adulto</label>
+      <input type="radio" id="t${i}c" name="tipo${i}" value="crianca">
+      <label for="t${i}c">Criança</label>
+    </div>
+    <div class="idade hidden">
+      <label for="id${i}">Idade da criança</label>
+      <select id="id${i}" class="g-idade">
+        <option value="">Selecione a idade...</option>
+        <option value="0">Menos de 1 ano</option>
+        ${Array.from({length:12}, (_,k) => `<option value="${k+1}">${k+1} ano${k?'s':''}</option>`).join('')}
+        <option value="13+">13 anos ou mais</option>
+      </select>
+    </div>`;
+  return d;
+}
+
+$('qtd').addEventListener('change', () => {
+  const n = parseInt($('qtd').value);
+  box.innerHTML = '';
+  if (!isNaN(n)) for (let i = 1; i <= n; i++) box.appendChild(cardConvidado(i));
+  validar();
+});
+box.addEventListener('input', validar);
+box.addEventListener('change', e => {
+  if (e.target.type === 'radio') {
+    const g = e.target.closest('.guest');
+    g.querySelector('.idade').classList.toggle('hidden', e.target.value !== 'crianca');
+    if (e.target.value !== 'crianca') g.querySelector('.g-idade').value = '';
+  }
+  validar();
+});
+document.querySelectorAll('input[name=presenca]').forEach(r => {
+  r.addEventListener('change', () => {
+    const vai = r.value === 'sim' && r.checked;
+    $('blocoSim').classList.toggle('hidden', !vai);
+    if (!vai) { $('qtd').value = ''; box.innerHTML = ''; }
+    validar();
+  });
+});
+$('nome').addEventListener('input', validar);
+$('fone').addEventListener('input', validar);
+
+function coletarConvidados(){
+  return [...box.querySelectorAll('.guest')].map(g => {
+    const tipo = g.querySelector('input[type=radio]:checked');
+    return {
+      el: g,
+      nome: g.querySelector('.g-nome').value.trim(),
+      tipo: tipo ? tipo.value : '',
+      idade: g.querySelector('.g-idade').value,
+    };
+  });
+}
+
+function validar(){
+  const gate = $('gate'), btn = $('btn');
+  const nome = $('nome').value.trim();
+  const fone = $('fone').value.replace(/\D/g,'');
+  const presenca = document.querySelector('input[name=presenca]:checked');
+
+  let falta = '';
+  if (!nome)                 falta = 'Preencha seu nome para continuar.';
+  else if (fone.length < 10) falta = 'Preencha um WhatsApp válido (com DDD).';
+  else if (!presenca)        falta = 'Diga se você vem à festa.';
+  else if (presenca.value === 'sim') {
+    if ($('qtd').value === '') falta = 'Escolha quantos convidados vêm com você.';
+    else {
+      const gs = coletarConvidados();
+      gs.forEach(g => {
+        const ok = g.nome && g.tipo && (g.tipo === 'adulto' || g.idade !== '');
+        g.el.classList.toggle('ok', !!ok);
+        g.el.querySelector('.st').textContent = ok ? '✓ ok' : '—';
+      });
+      const semNome  = gs.find(g => !g.nome);
+      const semTipo  = gs.find(g => g.nome && !g.tipo);
+      const semIdade = gs.find(g => g.tipo === 'crianca' && g.idade === '');
+      if (semNome)       falta = `Falta o nome do convidado ${semNome.el.dataset.i}.`;
+      else if (semTipo)  falta = `Diga se o convidado ${semTipo.el.dataset.i} é adulto ou criança.`;
+      else if (semIdade) falta = `Falta a idade da criança (convidado ${semIdade.el.dataset.i}).`;
+    }
+  }
+
+  if (falta) { gate.textContent = falta; gate.classList.remove('hidden'); btn.disabled = true; }
+  else       { gate.classList.add('hidden'); btn.disabled = false; }
+}
+validar();
+
+/* ---- firebase ---- */
+let db = null;
+try { firebase.initializeApp(firebaseConfig); db = firebase.database(); }
+catch (e) { console.error('Firebase não iniciou:', e); }
+
+const form = $('rsvp'), btn = $('btn'), err = $('err');
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  err.classList.add('hidden');
+  validar();
+  if (btn.disabled) return;
+  if (!db) {
+    err.textContent = 'Sem conexão com o servidor. Tente de novo em instantes.';
+    err.classList.remove('hidden');
+    return;
+  }
+
+  const vai = document.querySelector('input[name=presenca]:checked').value === 'sim';
+  const gs  = vai ? coletarConvidados().map(g => ({nome:g.nome, tipo:g.tipo, idade:g.tipo === 'crianca' ? g.idade : ''})) : [];
+
+  const dados = {
+    nome         : $('nome').value.trim(),
+    whatsapp     : $('fone').value.trim(),
+    vai          : vai,
+    convidados   : gs,
+    totalPessoas : vai ? gs.length + 1 : 0,
+    totalAdultos : vai ? gs.filter(g => g.tipo === 'adulto').length + 1 : 0,
+    totalCriancas: vai ? gs.filter(g => g.tipo === 'crianca').length : 0,
+    idadesCriancas: gs.filter(g => g.tipo === 'crianca').map(g => g.idade),
+    recado       : $('recado').value.trim(),
+    enviadoEm    : new Date().toISOString(),
+  };
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  try {
+    const idAntigo = localStorage.getItem(LS_KEY);
+    const ref = idAntigo ? db.ref(`${DB_PATH}/${idAntigo}`) : db.ref(DB_PATH).push();
+    await ref.set(dados);
+    localStorage.setItem(LS_KEY, ref.key);
+    mostrarConfirmado(dados);
+  } catch (e2) {
+    console.error(e2);
+    btn.disabled = false;
+    btn.textContent = 'Assinar confirmação';
+    err.textContent = 'Não deu para enviar. Verifique a internet e tente de novo.';
+    err.classList.remove('hidden');
+  }
+});
+
+function mostrarConfirmado(d){
+  $('formCard').classList.add('hidden');
+  $('doneCard').classList.remove('hidden');
+  $('stamp').textContent     = d.vai ? 'APROVADO' : 'REGISTRADO';
+  $('doneTitle').textContent = d.vai ? 'Presença confirmada' : 'Ausência registrada';
+  $('doneText').textContent  = d.vai
+    ? `${d.nome}, o Miguel espera você e sua equipe dia 15 de agosto no Vivace Eventos.`
+    : `Obrigado por avisar, ${d.nome}. O chefe vai sentir sua falta.`;
+
+  const lista = $('lista');
+  if (d.vai) {
+    lista.classList.remove('hidden');
+    lista.innerHTML = `<p class="t">Equipe confirmada (${d.totalPessoas})</p><ul>
+      <li>${d.nome}<span>você</span></li>
+      ${d.convidados.map(g => `<li>${g.nome}<span>${g.tipo === 'crianca' ? (g.idade === '0' ? 'menos de 1 ano' : g.idade + ' anos') : 'adulto'}</span></li>`).join('')}
+    </ul>`;
+  } else {
+    lista.classList.add('hidden');
+  }
+  $('doneCard').scrollIntoView({block:'center'});
+}
+
+$('again').addEventListener('click', () => {
+  $('doneCard').classList.add('hidden');
+  $('formCard').classList.remove('hidden');
+  btn.textContent = 'Atualizar minha resposta';
+  validar();
+  $('formCard').scrollIntoView({block:'center'});
+});
+</script>
+</body>
+</html>
