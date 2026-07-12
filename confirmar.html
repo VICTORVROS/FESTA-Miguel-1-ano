@@ -36,6 +36,12 @@
     <div class="card-in">
       <p class="sub" id="prazoTxt"></p>
 
+      <div class="gate hidden" id="jaFez" style="margin:0 0 18px">
+        Já existe uma confirmação enviada por este aparelho.<br>
+        <button type="button" id="corrigir" class="again" style="margin-top:6px">Quero corrigir aquela resposta</button><br>
+        <span style="font-weight:400;font-size:12px">Se for outra pessoa confirmando, é só preencher normalmente.</span>
+      </div>
+
       <form id="rsvp" novalidate>
         <label for="nome">Seu nome
           <small>Quem está confirmando pelo grupo.</small>
@@ -124,6 +130,10 @@ const firebaseConfig = {
 const DB_PATH = 'confirmacoes';
 const LS_KEY  = 'rsvp_miguel_1ano';
 const $ = id => document.getElementById(id);
+
+/* Cada envio cria um registro NOVO.
+   Só sobrescreve se a pessoa pedir para corrigir a própria resposta. */
+let editandoId = null;
 
 $('fData').textContent = CONFIG.dataTexto;
 $('fHora').textContent = CONFIG.horario;
@@ -282,10 +292,10 @@ form.addEventListener('submit', async e => {
   btn.textContent = 'Enviando...';
 
   try {
-    const idAntigo = localStorage.getItem(LS_KEY);
-    const ref = idAntigo ? db.ref(`${DB_PATH}/${idAntigo}`) : db.ref(DB_PATH).push();
+    const ref = editandoId ? db.ref(`${DB_PATH}/${editandoId}`) : db.ref(DB_PATH).push();
     await ref.set(dados);
     localStorage.setItem(LS_KEY, ref.key);
+    editandoId = null;
     mostrarConfirmado(dados);
   } catch (e2) {
     console.error(e2);
@@ -318,13 +328,20 @@ function mostrarConfirmado(d){
   $('doneCard').scrollIntoView({block:'center'});
 }
 
-$('again').addEventListener('click', () => {
+function abrirCorrecao(){
+  editandoId = localStorage.getItem(LS_KEY);
   $('doneCard').classList.add('hidden');
+  $('jaFez').classList.add('hidden');
   $('formCard').classList.remove('hidden');
   btn.textContent = 'Atualizar minha resposta';
   validar();
   $('formCard').scrollIntoView({block:'center'});
-});
+}
+$('again').addEventListener('click', abrirCorrecao);
+$('corrigir').addEventListener('click', abrirCorrecao);
+
+// avisa se este aparelho já enviou alguma confirmação
+if (localStorage.getItem(LS_KEY)) $('jaFez').classList.remove('hidden');
 </script>
 </body>
 </html>
