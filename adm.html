@@ -211,7 +211,9 @@ function conectar(){
 
   db.ref(DB_PATH).on('value', snap => {
     dados = [];
-    snap.forEach(c => dados.push({ id: c.key, ...c.val() }));
+    // ATENÇÃO: o callback do forEach do Firebase NÃO pode retornar valor
+    // verdadeiro, senão ele para de varrer. Por isso o corpo em bloco.
+    snap.forEach(c => { dados.push({ id: c.key, ...c.val() }); });
     dados.sort((a,b) => (b.enviadoEm || '').localeCompare(a.enviadoEm || ''));
     render();
     $('live').innerHTML = `<b>ao vivo</b> — atualiza sozinho a cada nova resposta`;
