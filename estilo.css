@@ -26,7 +26,14 @@ body{
     repeating-linear-gradient(45deg,  rgba(74,144,226,.05) 0 20px, transparent 20px 40px);
   -webkit-font-smoothing:antialiased;line-height:1.5;
 }
-.wrap{max-width:560px;margin:0 auto;padding:0 0 50px}
+body{position:relative;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;padding:0 0 50px;position:relative;z-index:2}
+.film{
+  position:absolute;z-index:0;pointer-events:none;user-select:none;
+  width:clamp(90px,26vw,140px);opacity:.85;
+}
+.film.a{top:34%;left:-6%;transform:rotate(-6deg)}
+.film.b{bottom:4%;right:-7%;transform:rotate(8deg) scaleX(-1)}
 
 /* ---------- HERO ---------- */
 .hero{position:relative}
@@ -50,10 +57,11 @@ body{
 
 /* ---------- CHAMADA ---------- */
 .chamada{
-  text-align:center;font-family:var(--display);font-size:clamp(19px,5.4vw,24px);
-  line-height:1.25;margin:14px 18px 0;text-transform:uppercase;
+  text-align:center;font-family:var(--display);font-size:clamp(15px,4.15vw,21px);
+  line-height:1.3;margin:16px 10px 0;text-transform:uppercase;
   text-shadow:-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,2px 2px 0 #fff,0 3px 0 rgba(31,31,31,.14);
 }
+.chamada span{display:block;white-space:nowrap}
 
 /* ---------- DADOS ---------- */
 .dados{
@@ -63,7 +71,7 @@ body{
 .dado{font-family:var(--display);color:var(--preto);line-height:1.15}
 .dado .big{display:block;font-size:clamp(30px,8.6vw,38px)}
 .dado .sml{display:block;font-size:clamp(14px,3.9vw,17px);margin-top:3px}
-.dado.local .sml{font-size:clamp(14px,3.9vw,17px);margin-top:0}
+.dado.local .sml{font-size:clamp(17px,5vw,22px);margin-top:0;line-height:1.15}
 .dado.local .sml + .sml{margin-top:2px}
 
 .maleta{
@@ -99,6 +107,7 @@ body{
 .acao .ic svg{width:28px;height:28px;stroke:var(--branco);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
 .mascote{width:52%;max-width:200px;display:block;margin:14px auto -6px}
+.mascote.grande{width:44%;max-width:170px;margin:22px auto 4px}
 
 .voltar{
   display:inline-flex;align-items:center;gap:8px;margin:20px 0 0 20px;
