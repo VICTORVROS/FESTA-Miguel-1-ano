@@ -28,12 +28,6 @@ body{
 }
 body{position:relative;overflow-x:hidden}
 .wrap{max-width:560px;margin:0 auto;padding:0 0 50px;position:relative;z-index:2}
-.film{
-  position:absolute;z-index:0;pointer-events:none;user-select:none;
-  width:clamp(90px,26vw,140px);opacity:.85;
-}
-.film.a{top:34%;left:-6%;transform:rotate(-6deg)}
-.film.b{bottom:4%;right:-7%;transform:rotate(8deg) scaleX(-1)}
 
 /* ---------- HERO ---------- */
 .hero{position:relative}
