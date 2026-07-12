@@ -30,7 +30,7 @@ body{
 
 /* ---------- HERO ---------- */
 .hero{position:relative}
-.video-box{position:relative;width:100%;overflow:hidden;background:var(--preto);aspect-ratio:1248/576}
+.video-box{position:relative;width:100%;overflow:hidden;background:var(--preto);aspect-ratio:1072/576}
 .video-box video{width:100%;height:100%;object-fit:cover;display:block}
 .video-box::after{
   content:"";position:absolute;inset:auto 0 0 0;height:34%;
@@ -98,7 +98,7 @@ body{
 }
 .acao .ic svg{width:28px;height:28px;stroke:var(--branco);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
-.mascote{width:46%;max-width:180px;display:block;margin:10px 0 -6px 6px}
+.mascote{width:52%;max-width:200px;display:block;margin:14px auto -6px}
 
 .voltar{
   display:inline-flex;align-items:center;gap:8px;margin:20px 0 0 20px;
