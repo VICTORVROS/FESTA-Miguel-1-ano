@@ -51,11 +51,12 @@ body{position:relative;overflow-x:hidden}
 
 /* ---------- CHAMADA ---------- */
 .chamada{
-  text-align:center;font-family:var(--display);font-size:clamp(15px,4.15vw,21px);
-  line-height:1.3;margin:16px 10px 0;text-transform:uppercase;
+  text-align:center;font-family:var(--display);font-size:clamp(13px,3.9vw,20px);
+  line-height:1.3;margin:16px 8px 0;text-transform:uppercase;white-space:nowrap;
   text-shadow:-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,2px 2px 0 #fff,0 3px 0 rgba(31,31,31,.14);
 }
 .chamada span{display:block;white-space:nowrap}
+.chamada br{display:block}
 
 /* ---------- DADOS ---------- */
 .dados{
@@ -65,7 +66,7 @@ body{position:relative;overflow-x:hidden}
 .dado{font-family:var(--display);color:var(--preto);line-height:1.15}
 .dado .big{display:block;font-size:clamp(30px,8.6vw,38px)}
 .dado .sml{display:block;font-size:clamp(14px,3.9vw,17px);margin-top:3px}
-.dado.local .sml{font-size:clamp(17px,5vw,22px);margin-top:0;line-height:1.15}
+.dado.local .sml{font-size:clamp(20px,5.9vw,26px);margin-top:0;line-height:1.12}
 .dado.local .sml + .sml{margin-top:2px}
 
 .maleta{
