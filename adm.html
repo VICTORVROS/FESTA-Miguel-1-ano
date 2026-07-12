@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>RH — Painel de Confirmações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --preto:#1F1F1F; --cinza-escuro:#333333; --branco:#FFFFFF;
+  --azul-principal:#4A90E2; --azul-claro:#DDEEFF;
+  --dourado:#D4AF37; --cinza-claro:#F5F5F5;
+  --linha:rgba(31,31,31,.14); --verm:#C0392B;
+  --display:'Archivo Black',system-ui,sans-serif;
+  --body:'Barlow',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--body);color:var(--preto);background:var(--cinza-claro);
+  -webkit-font-smoothing:antialiased;line-height:1.5;
+}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 60px}
+
+/* topo */
+.top{
+  background:var(--preto);color:var(--branco);border-radius:14px;
+  padding:16px 18px;display:flex;justify-content:space-between;align-items:center;
+}
+.top h1{font-family:var(--display);font-size:18px}
+.top span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dourado)}
+.live{font-family:var(--mono);font-size:11px;color:var(--cinza-escuro);text-align:center;margin-top:8px}
+.live b{color:var(--azul-principal)}
+
+/* login */
+.lock{
+  background:var(--branco);border:2px solid var(--preto);border-radius:14px;
+  padding:28px 20px;margin-top:18px;text-align:center;
+}
+.lock h2{font-family:var(--display);font-size:20px;margin-bottom:6px}
+.lock p{color:var(--cinza-escuro);font-size:14px;margin-bottom:16px}
+input{
+  width:100%;font-family:var(--body);font-size:16px;padding:13px 14px;
+  border:2px solid var(--linha);border-radius:10px;background:var(--cinza-claro);
+}
+input:focus{outline:none;border-color:var(--azul-principal);background:var(--branco)}
+button{
+  font-family:var(--display);font-size:15px;color:var(--branco);background:var(--preto);
+  border:2px solid var(--preto);border-radius:10px;padding:14px;cursor:pointer;width:100%;
+  margin-top:12px;transition:.15s;
+}
+button:hover{background:var(--dourado);color:var(--preto)}
+.mini{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  padding:10px 14px;width:auto;
+}
+
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+@media(min-width:620px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{
+  background:var(--branco);border:2px solid var(--preto);border-radius:14px;padding:16px;
+}
+.kpi.gold{background:var(--preto);color:var(--branco)}
+.kpi .n{font-family:var(--display);font-size:34px;line-height:1}
+.kpi.gold .n{color:var(--dourado)}
+.kpi .l{
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cinza-escuro);margin-top:6px;
+}
+.kpi.gold .l{color:var(--azul-claro)}
+
+/* cards */
+.card{
+  background:var(--branco);border:2px solid var(--preto);border-radius:14px;
+  margin-top:18px;overflow:hidden;
+}
+.card-head{
+  background:var(--cinza-claro);border-bottom:2px solid var(--preto);padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.card-head h2{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+.card-in{padding:16px}
+
+/* faixa etária */
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:78px 1fr 28px;align-items:center;gap:10px;font-size:13px}
+.bar .t{font-family:var(--mono);font-size:11px;color:var(--cinza-escuro)}
+.bar .track{background:var(--cinza-claro);border-radius:99px;height:16px;overflow:hidden}
+.bar .fill{background:var(--azul-principal);height:100%;border-radius:99px;min-width:2px;transition:width .4s}
+.bar .v{font-family:var(--display);font-size:14px;text-align:right}
+
+/* lista */
+.g{border-bottom:1px solid var(--linha);padding:14px 0}
+.g:first-child{padding-top:0}
+.g:last-child{border-bottom:0;padding-bottom:0}
+.g-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.g-top b{font-size:16px}
+.g-top .pill{
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--azul-claro);color:var(--azul-principal);padding:3px 8px;border-radius:99px;flex:none;
+}
+.g.nao .pill{background:#FBE9E7;color:var(--verm)}
+.g .zap{font-family:var(--mono);font-size:12px;color:var(--cinza-escuro);text-decoration:none}
+.g .zap:hover{color:var(--azul-principal)}
+.g ul{margin-top:8px;padding-left:14px;border-left:3px solid var(--dourado)}
+.g li{list-style:none;font-size:14px;display:flex;justify-content:space-between;padding:2px 0}
+.g li span{font-family:var(--mono);font-size:12px;color:var(--cinza-escuro)}
+.g .rec{
+  margin-top:8px;background:var(--cinza-claro);border-radius:8px;padding:10px;
+  font-size:14px;font-style:italic;color:var(--cinza-escuro);
+}
+.vazio{text-align:center;color:var(--cinza-escuro);font-size:14px;padding:22px 0}
+.del{
+  background:none;border:0;color:var(--verm);font-family:var(--mono);font-size:10px;
+  text-transform:uppercase;letter-spacing:.1em;cursor:pointer;width:auto;padding:6px 0 0;margin:0;
+}
+.del:hover{background:none;color:var(--verm);text-decoration:underline}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <h1>Painel do RH</h1>
+    <span>Poderoso Miguel</span>
+  </div>
+
+  <!-- senha -->
+  <section class="lock" id="lock">
+    <h2>Área restrita</h2>
+    <p>Digite a senha do RH para ver as confirmações.</p>
+    <input type="password" id="senha" placeholder="Senha" autocomplete="off">
+    <button id="entrar">ENTRAR</button>
+  </section>
+
+  <!-- painel -->
+  <div id="painel" class="hidden">
+    <p class="live" id="live">Conectando ao banco...</p>
+
+    <div class="kpis">
+      <div class="kpi gold"><div class="n" id="kPessoas">0</div><div class="l">Pessoas confirmadas</div></div>
+      <div class="kpi"><div class="n" id="kAdultos">0</div><div class="l">Adultos</div></div>
+      <div class="kpi"><div class="n" id="kCriancas">0</div><div class="l">Crianças</div></div>
+      <div class="kpi"><div class="n" id="kNao">0</div><div class="l">Não vão</div></div>
+    </div>
+
+    <section class="card">
+      <div class="card-head"><h2>Faixa etária das crianças</h2></div>
+      <div class="card-in"><div class="bars" id="faixas"></div></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Confirmações <span id="qtdConf"></span></h2>
+        <button class="mini" id="csv">Exportar CSV</button>
+      </div>
+      <div class="card-in" id="lista"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Recados para o Miguel</h2></div>
+      <div class="card-in" id="recados"></div>
+    </section>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const SENHA = 'miguel2026';   // <<< troque pela senha que quiser
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCWc2ZXPhA_kU0HbcRqY3QPrGgug5HtBSQ",
+  authDomain: "poderoso-miguel.firebaseapp.com",
+  databaseURL: "https://poderoso-miguel-default-rtdb.firebaseio.com",
+  projectId: "poderoso-miguel",
+  storageBucket: "poderoso-miguel.firebasestorage.app",
+  messagingSenderId: "382916237062",
+  appId: "1:382916237062:web:bba1400114d6ae4d24b087"
+};
+const DB_PATH = 'confirmacoes';
+
+const $ = id => document.getElementById(id);
+let db = null, dados = [];
+
+/* ---- senha (só esconde a tela; a proteção real é a regra do banco) ---- */
+function entrar(){
+  if ($('senha').value !== SENHA) { $('senha').value = ''; $('senha').placeholder = 'Senha incorreta'; return; }
+  sessionStorage.setItem('rh_ok', '1');
+  $('lock').classList.add('hidden');
+  $('painel').classList.remove('hidden');
+  conectar();
+}
+$('entrar').addEventListener('click', entrar);
+$('senha').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
+if (sessionStorage.getItem('rh_ok')) { $('lock').classList.add('hidden'); $('painel').classList.remove('hidden'); }
+
+/* ---- firebase em tempo real ---- */
+function conectar(){
+  if (db) return;
+  try { firebase.initializeApp(firebaseConfig); db = firebase.database(); }
+  catch(e){ $('live').textContent = 'Erro ao conectar no Firebase.'; return; }
+
+  db.ref(DB_PATH).on('value', snap => {
+    dados = [];
+    snap.forEach(c => dados.push({ id: c.key, ...c.val() }));
+    dados.sort((a,b) => (b.enviadoEm || '').localeCompare(a.enviadoEm || ''));
+    render();
+    $('live').innerHTML = `<b>ao vivo</b> — atualiza sozinho a cada nova resposta`;
+  }, () => { $('live').textContent = 'Sem permissão de leitura no banco.'; });
+}
+if (sessionStorage.getItem('rh_ok')) conectar();
+
+/* ---- render ---- */
+const FAIXAS = [
+  ['0 a 2 anos',  i => i <= 2],
+  ['3 a 5 anos',  i => i >= 3 && i <= 5],
+  ['6 a 9 anos',  i => i >= 6 && i <= 9],
+  ['10 a 12 anos',i => i >= 10 && i <= 12],
+  ['13 ou mais',  i => i >= 13],
+];
+
+function render(){
+  const sim = dados.filter(d => d.vai);
+  const nao = dados.filter(d => !d.vai);
+
+  const pessoas  = sim.reduce((s,d) => s + (d.totalPessoas  || 0), 0);
+  const adultos  = sim.reduce((s,d) => s + (d.totalAdultos  || 0), 0);
+  const criancas = sim.reduce((s,d) => s + (d.totalCriancas || 0), 0);
+
+  $('kPessoas').textContent  = pessoas;
+  $('kAdultos').textContent  = adultos;
+  $('kCriancas').textContent = criancas;
+  $('kNao').textContent      = nao.length;
+  $('qtdConf').textContent   = `(${dados.length})`;
+
+  // faixa etária
+  const idades = sim.flatMap(d => (d.convidados || [])
+    .filter(g => g.tipo === 'crianca')
+    .map(g => g.idade === '13+' ? 13 : parseInt(g.idade)))
+    .filter(n => !isNaN(n));
+  const max = Math.max(1, ...FAIXAS.map(([,f]) => idades.filter(f).length));
+  $('faixas').innerHTML = idades.length === 0
+    ? '<p class="vazio">Nenhuma criança confirmada ainda.</p>'
+    : FAIXAS.map(([nome, f]) => {
+        const n = idades.filter(f).length;
+        return `<div class="bar">
+          <span class="t">${nome}</span>
+          <span class="track"><span class="fill" style="width:${n/max*100}%"></span></span>
+          <span class="v">${n}</span>
+        </div>`;
+      }).join('');
+
+  // lista
+  $('lista').innerHTML = dados.length === 0
+    ? '<p class="vazio">Nenhuma confirmação ainda.</p>'
+    : dados.map(d => `
+      <div class="g ${d.vai ? '' : 'nao'}">
+        <div class="g-top">
+          <b>${esc(d.nome)}</b>
+          <span class="pill">${d.vai ? d.totalPessoas + ' pessoa' + (d.totalPessoas > 1 ? 's' : '') : 'não vai'}</span>
+        </div>
+        <a class="zap" href="https://wa.me/55${(d.whatsapp||'').replace(/\D/g,'')}" target="_blank" rel="noopener">${esc(d.whatsapp || '')}</a>
+        ${d.vai && (d.convidados||[]).length ? `<ul>${d.convidados.map(g =>
+            `<li>${esc(g.nome)}<span>${g.tipo === 'crianca' ? (g.idade === '0' ? 'bebê' : g.idade + (g.idade === '13+' ? '' : ' anos')) : 'adulto'}</span></li>`
+          ).join('')}</ul>` : ''}
+        ${d.recado ? `<p class="rec">“${esc(d.recado)}”</p>` : ''}
+        <button class="del" data-id="${d.id}">Excluir</button>
+      </div>`).join('');
+
+  // recados
+  const recs = dados.filter(d => d.recado);
+  $('recados').innerHTML = recs.length === 0
+    ? '<p class="vazio">Nenhum recado ainda.</p>'
+    : recs.map(d => `<div class="g"><p class="rec">“${esc(d.recado)}”</p><div class="g-top"><b style="font-size:14px">— ${esc(d.nome)}</b></div></div>`).join('');
+}
+
+function esc(s){ return String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+
+/* ---- excluir ---- */
+$('lista').addEventListener('click', e => {
+  if (!e.target.classList.contains('del')) return;
+  if (!confirm('Excluir esta confirmação? Não dá para desfazer.')) return;
+  db.ref(`${DB_PATH}/${e.target.dataset.id}`).remove();
+});
+
+/* ---- exportar csv ---- */
+$('csv').addEventListener('click', () => {
+  const linhas = [['Nome','WhatsApp','Vai','Total pessoas','Adultos','Crianças','Convidados','Idades das crianças','Recado','Enviado em']];
+  dados.forEach(d => linhas.push([
+    d.nome, d.whatsapp, d.vai ? 'Sim' : 'Não',
+    d.totalPessoas || 0, d.totalAdultos || 0, d.totalCriancas || 0,
+    (d.convidados || []).map(g => g.nome).join(' | '),
+    (d.convidados || []).filter(g => g.tipo === 'crianca').map(g => g.idade).join(' | '),
+    (d.recado || '').replace(/\n/g,' '),
+    d.enviadoEm || ''
+  ]));
+  const csv = '\uFEFF' + linhas.map(l => l.map(c => `"${String(c).replace(/"/g,'""')}"`).join(';')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = `confirmacoes-miguel-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+});
+</script>
+</body>
+</html>
