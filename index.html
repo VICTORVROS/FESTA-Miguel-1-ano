@@ -30,22 +30,31 @@
 }
 .maleta-btn{
   background:none;border:0;cursor:pointer;padding:0;margin-top:26px;
-  display:block;width:clamp(190px,58vw,240px);
+  display:block;width:clamp(150px,44vw,190px);
   transition:transform .16s;
-  animation:pulsa 2.4s ease-in-out infinite;
+  animation:toca 1.5s ease-in-out infinite;
 }
 .maleta-btn:hover{transform:scale(1.04)}
 .maleta-btn:active{transform:scale(.97)}
 .maleta-btn:focus-visible{outline:3px solid var(--azul-principal);outline-offset:6px;border-radius:14px}
 .maleta-btn svg{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 26px rgba(31,31,31,.35))}
-@keyframes pulsa{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes toca{
+  0%,58%,100%{transform:rotate(0) scale(1)}
+  62%{transform:rotate(-11deg) scale(1.03)}
+  66%{transform:rotate(9deg) scale(1.03)}
+  70%{transform:rotate(-7deg) scale(1.03)}
+  74%{transform:rotate(5deg) scale(1.02)}
+  78%{transform:rotate(0) scale(1)}
+}
+.atender{animation:pulsaverde 1.5s ease-in-out infinite;transform-origin:134px 268px}
+@keyframes pulsaverde{0%,55%,100%{transform:scale(1)}70%{transform:scale(1.12)}}
 .abrir{
   margin-top:18px;font-family:var(--display);font-size:clamp(14px,4.2vw,17px);
   text-transform:uppercase;text-align:center;
   text-shadow:-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,2px 2px 0 #fff;
 }
 .capa .mascote{width:38%;max-width:150px;margin-top:26px}
-@media (prefers-reduced-motion:reduce){.maleta-btn{animation:none}}
+@media (prefers-reduced-motion:reduce){.maleta-btn,.atender{animation:none}}
 </style>
 </head>
 <body>
@@ -53,26 +62,55 @@
   <div class="capa">
 
     <img class="logo" src="logo.png" alt="O Poderoso Miguel">
-    <p class="conf">Reunião confidencial · 15.08</p>
+    <p class="conf">Chamada recebida · O chefinho</p>
 
-    <button class="maleta-btn" id="abrir" aria-label="Abrir o convite">
-      <svg viewBox="0 0 240 180">
-        <!-- alça -->
-        <path d="M92 34c0-8 6-14 14-14h28c8 0 14 6 14 14v14h-14V38c0-2-2-4-4-4h-20c-2 0-4 2-4 4v10H92z" fill="#1F1F1F"/>
-        <!-- corpo -->
-        <rect x="20" y="48" width="200" height="112" rx="14" fill="#1F1F1F"/>
-        <rect x="20" y="92" width="200" height="12" fill="#333333"/>
-        <!-- fechos dourados -->
-        <rect x="58" y="86" width="34" height="24" rx="4" fill="#D4AF37"/>
-        <rect x="148" y="86" width="34" height="24" rx="4" fill="#D4AF37"/>
-        <rect x="66" y="94" width="18" height="8" rx="2" fill="#1F1F1F"/>
-        <rect x="156" y="94" width="18" height="8" rx="2" fill="#1F1F1F"/>
-        <!-- brilho -->
-        <rect x="34" y="60" width="172" height="6" rx="3" fill="#FFFFFF" opacity=".12"/>
+    <button class="maleta-btn" id="abrir" aria-label="Atender a chamada do chefinho">
+      <svg viewBox="0 0 200 340">
+        <!-- corpo do iphone -->
+        <rect x="16" y="10" width="168" height="320" rx="34" fill="#1F1F1F"/>
+        <rect x="22" y="16" width="156" height="308" rx="29" fill="#333333"/>
+        <!-- tela -->
+        <rect x="26" y="20" width="148" height="300" rx="26" fill="#DDEEFF"/>
+        <!-- botões laterais -->
+        <rect x="12" y="86" width="4" height="26" rx="2" fill="#333333"/>
+        <rect x="12" y="122" width="4" height="26" rx="2" fill="#333333"/>
+        <rect x="184" y="100" width="4" height="42" rx="2" fill="#333333"/>
+        <!-- dynamic island -->
+        <rect x="76" y="30" width="48" height="15" rx="7.5" fill="#1F1F1F"/>
+
+        <!-- "chamada recebida" -->
+        <text x="100" y="86" text-anchor="middle" font-family="'IBM Plex Mono',monospace"
+              font-size="10" letter-spacing="1.4" fill="#4A90E2">CHAMADA</text>
+
+        <!-- foto do Miguel -->
+        <defs>
+          <clipPath id="corte"><circle cx="100" cy="132" r="34"/></clipPath>
+        </defs>
+        <image href="rosto.png" x="66" y="98" width="68" height="68" clip-path="url(#corte)"/>
+        <circle cx="100" cy="132" r="34" fill="none" stroke="#1F1F1F" stroke-width="3"/>
+
+        <text x="100" y="192" text-anchor="middle" font-family="'Archivo Black',sans-serif"
+              font-size="15" fill="#1F1F1F">MIGUEL</text>
+        <text x="100" y="208" text-anchor="middle" font-family="'IBM Plex Mono',monospace"
+              font-size="8.5" letter-spacing="1.2" fill="#333333">DIRETOR EXECUTIVO</text>
+
+        <!-- botão recusar -->
+        <circle cx="66" cy="268" r="22" fill="#C0392B"/>
+        <g transform="rotate(135 66 268)">
+          <path fill="#FFFFFF" d="M56 259c-2 0-4 2-4 4 0 12 10 22 22 22 2 0 4-2 4-4v-4c0-1-1-3-2-3l-4-1c-1 0-2 0-3 1l-1 2a17 17 0 0 1-7-7l2-1c1-1 2-2 1-3l-1-4c0-1-2-2-3-2z"/>
+        </g>
+        <!-- botão atender (verde, pulsando) -->
+        <g class="atender">
+          <circle cx="134" cy="268" r="22" fill="#2E9E5B"/>
+          <path fill="#FFFFFF" d="M124 259c-2 0-4 2-4 4 0 12 10 22 22 22 2 0 4-2 4-4v-4c0-1-1-3-2-3l-4-1c-1 0-2 0-3 1l-1 2a17 17 0 0 1-7-7l2-1c1-1 2-2 1-3l-1-4c0-1-2-2-3-2z"/>
+        </g>
+
+        <!-- barra inferior -->
+        <rect x="76" y="308" width="48" height="4" rx="2" fill="#1F1F1F" opacity=".35"/>
       </svg>
     </button>
 
-    <p class="abrir">Toque na maleta<br>para abrir o convite</p>
+    <p class="abrir">Atenda a chamada<br>do chefinho — clique aqui</p>
 
     <img class="mascote" src="baby.png" alt="" aria-hidden="true">
   </div>
