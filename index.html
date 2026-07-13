@@ -20,74 +20,69 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilo.css">
+<style>
+/* ---------- CAPA ---------- */
+.capa{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:30px 20px}
+.capa .logo{margin:0 auto;width:100%;max-width:430px}
+.capa .conf{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--preto);margin-top:14px;text-align:center;
+}
+.maleta-btn{
+  background:none;border:0;cursor:pointer;padding:0;margin-top:26px;
+  display:block;width:clamp(190px,58vw,240px);
+  transition:transform .16s;
+  animation:pulsa 2.4s ease-in-out infinite;
+}
+.maleta-btn:hover{transform:scale(1.04)}
+.maleta-btn:active{transform:scale(.97)}
+.maleta-btn:focus-visible{outline:3px solid var(--azul-principal);outline-offset:6px;border-radius:14px}
+.maleta-btn svg{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 26px rgba(31,31,31,.35))}
+@keyframes pulsa{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.abrir{
+  margin-top:18px;font-family:var(--display);font-size:clamp(14px,4.2vw,17px);
+  text-transform:uppercase;text-align:center;
+  text-shadow:-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,2px 2px 0 #fff;
+}
+.capa .mascote{width:38%;max-width:150px;margin-top:26px}
+@media (prefers-reduced-motion:reduce){.maleta-btn{animation:none}}
+</style>
 </head>
 <body>
 <div class="wrap">
+  <div class="capa">
 
-  <header class="hero">
-    <div class="video-box">
-      <video id="vid" autoplay muted loop playsinline preload="auto" poster="poster.jpg"
-             disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
-        <source src="video.mp4" type="video/mp4">
-      </video>
-      <button class="som" id="som" aria-label="Ativar som">
-        <svg id="icSom" viewBox="0 0 24 24">
-          <path d="M11 5L6 9H3v6h3l5 4V5z"/>
-          <line x1="22" y1="9" x2="16" y2="15"/>
-          <line x1="16" y1="9" x2="22" y2="15"/>
-        </svg>
-      </button>
-    </div>
     <img class="logo" src="logo.png" alt="O Poderoso Miguel">
-  </header>
+    <p class="conf">Reunião confidencial · 15.08</p>
 
-  <p class="chamada"><span>Você tem um encontro marcado</span><span>com o chefinho</span></p>
+    <button class="maleta-btn" id="abrir" aria-label="Abrir o convite">
+      <svg viewBox="0 0 240 180">
+        <!-- alça -->
+        <path d="M92 34c0-8 6-14 14-14h28c8 0 14 6 14 14v14h-14V38c0-2-2-4-4-4h-20c-2 0-4 2-4 4v10H92z" fill="#1F1F1F"/>
+        <!-- corpo -->
+        <rect x="20" y="48" width="200" height="112" rx="14" fill="#1F1F1F"/>
+        <rect x="20" y="92" width="200" height="12" fill="#333333"/>
+        <!-- fechos dourados -->
+        <rect x="58" y="86" width="34" height="24" rx="4" fill="#D4AF37"/>
+        <rect x="148" y="86" width="34" height="24" rx="4" fill="#D4AF37"/>
+        <rect x="66" y="94" width="18" height="8" rx="2" fill="#1F1F1F"/>
+        <rect x="156" y="94" width="18" height="8" rx="2" fill="#1F1F1F"/>
+        <!-- brilho -->
+        <rect x="34" y="60" width="172" height="6" rx="3" fill="#FFFFFF" opacity=".12"/>
+      </svg>
+    </button>
 
-  <div class="dados">
-    <div class="dado"><span class="big">17</span><span class="sml">Horas</span></div>
-    <div class="maleta">
-      <div class="dia">15</div>
-      <div class="mes">DE AGOSTO</div>
-    </div>
-    <div class="dado local"><span class="sml">Vivace</span><span class="sml">Eventos</span></div>
+    <p class="abrir">Toque na maleta<br>para abrir o convite</p>
+
+    <img class="mascote" src="baby.png" alt="" aria-hidden="true">
   </div>
-
-  <div class="acoes">
-    <a class="acao" href="confirmar.html">
-      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></span>
-      Confirmar presença
-    </a>
-    <a class="acao" href="presentes.html">
-      <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 13h18M12 9v12"/><path d="M12 9S9.5 4 7 5.5 9 9 12 9zM12 9s2.5-5 5-3.5S15 9 12 9z"/></svg></span>
-      Sugestão de presente
-    </a>
-  </div>
-
-  <img class="mascote" src="baby.png" alt="" aria-hidden="true">
-
-  <footer>Dúvidas? Fale com o RH: <a href="https://wa.me/5524999518299">(24) 99951-8299</a></footer>
 </div>
 
 <script>
-const v   = document.getElementById('vid');
-const btn = document.getElementById('som');
-const ic  = document.getElementById('icSom');
-
-const ON  = '<path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/>';
-const OFF = '<path d="M11 5L6 9H3v6h3l5 4V5z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/>';
-
-/* O celular só deixa tocar sozinho se estiver mudo.
-   O som entra quando a pessoa toca no botão do alto-falante. */
-v.muted = true;
-const tocar = () => v.play().catch(() => {});
-tocar();
-document.addEventListener('touchstart', tocar, {once:true});
-
-btn.addEventListener('click', () => {
-  v.muted = !v.muted;
-  ic.innerHTML = v.muted ? OFF : ON;
-  btn.setAttribute('aria-label', v.muted ? 'Ativar som' : 'Desativar som');
-  if (!v.muted) { v.volume = 1; v.play().catch(() => {}); }
+// o clique aqui já conta como "toque do usuário" — por isso o vídeo
+// do convite consegue começar sozinho na próxima página
+document.getElementById('abrir').addEventListener('click', () => {
+  location.href = 'convite.html?a=1';
 });
 </script>
 </body>

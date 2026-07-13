@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convite — O Poderoso Miguel</title>
+<meta name="description" content="Você tem um encontro marcado com o chefinho. 15 de agosto, 17h, Vivace Eventos.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://victorvros.github.io/FESTA-Miguel-1-ano/">
+<meta property="og:title" content="O Poderoso Miguel — 1 Ano">
+<meta property="og:description" content="15 de agosto · 17h · Vivace Eventos. Confirme sua presença!">
+<meta property="og:image" content="https://victorvros.github.io/FESTA-Miguel-1-ano/preview.jpg">
+<meta property="og:image:secure_url" content="https://victorvros.github.io/FESTA-Miguel-1-ano/preview.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://victorvros.github.io/FESTA-Miguel-1-ano/preview.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="video-box">
+      <video id="vid" autoplay muted loop playsinline preload="auto" poster="poster.jpg"
+             disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
+        <source src="video.mp4" type="video/mp4">
+      </video>
+      <button class="som" id="som" aria-label="Ativar som">
+        <svg id="icSom" viewBox="0 0 24 24">
+          <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+          <line x1="22" y1="9" x2="16" y2="15"/>
+          <line x1="16" y1="9" x2="22" y2="15"/>
+        </svg>
+      </button>
+    </div>
+    <img class="logo" src="logo.png" alt="O Poderoso Miguel">
+  </header>
+
+  <p class="chamada"><span>Você tem um encontro marcado</span><span>com o chefinho</span></p>
+
+  <div class="dados">
+    <div class="dado"><span class="big">17</span><span class="sml">Horas</span></div>
+    <div class="maleta">
+      <div class="dia">15</div>
+      <div class="mes">DE AGOSTO</div>
+    </div>
+    <div class="dado local"><span class="sml">Vivace</span><span class="sml">Eventos</span></div>
+  </div>
+
+  <div class="acoes">
+    <a class="acao" href="confirmar.html">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></span>
+      Confirmar presença
+    </a>
+    <a class="acao" href="presentes.html">
+      <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 13h18M12 9v12"/><path d="M12 9S9.5 4 7 5.5 9 9 12 9zM12 9s2.5-5 5-3.5S15 9 12 9z"/></svg></span>
+      Sugestão de presente
+    </a>
+  </div>
+
+  <img class="mascote" src="baby.png" alt="" aria-hidden="true">
+
+  <footer>Dúvidas? Fale com o RH: <a href="https://wa.me/5524999518299">(24) 99951-8299</a></footer>
+</div>
+
+<script>
+const v   = document.getElementById('vid');
+const btn = document.getElementById('som');
+const ic  = document.getElementById('icSom');
+
+const ON  = '<path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/>';
+const OFF = '<path d="M11 5L6 9H3v6h3l5 4V5z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/>';
+
+/* O celular só deixa tocar sozinho se estiver mudo.
+   O som entra quando a pessoa toca no botão do alto-falante. */
+/* veio da capa? a pessoa já tocou na tela, então tentamos com som.
+   Se o navegador bloquear, cai para o modo mudo e o botão libera o som. */
+const veioDaCapa = new URLSearchParams(location.search).get('a') === '1';
+
+if (veioDaCapa) {
+  v.muted = false;
+  v.play().then(() => { ic.innerHTML = ON; })
+          .catch(() => { v.muted = true; ic.innerHTML = OFF; v.play().catch(() => {}); });
+} else {
+  v.muted = true;
+  v.play().catch(() => {});
+}
+document.addEventListener('touchstart', () => v.play().catch(() => {}), {once:true});
+
+btn.addEventListener('click', () => {
+  v.muted = !v.muted;
+  ic.innerHTML = v.muted ? OFF : ON;
+  btn.setAttribute('aria-label', v.muted ? 'Ativar som' : 'Desativar som');
+  if (!v.muted) { v.volume = 1; v.play().catch(() => {}); }
+});
+</script>
+</body>
+</html>
